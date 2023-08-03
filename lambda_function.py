@@ -122,7 +122,7 @@ def write_boundingbox(frame, target):
             cv2.rectangle(frame[i], (x, y), (x + w, y + h), (255, 0, 0), 3)
             cv2.putText(frame[i], str('Face {}'.format(t['Person']['Index'])), (x, y - 9),
                         cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 0, 0), 3)
-        return
+    return
 
 def output_video(video_fps, frame):
     """解析結果動画出力関数
