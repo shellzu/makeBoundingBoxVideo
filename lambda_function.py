@@ -7,23 +7,39 @@ import cv2
 
 file_name = 'IMG_3656_lambda'
 
-# 動画読込関数
 def loading_video(file_name):
+    """動画読み込み関数
+
+    Parameters:
+    ----------
+    file_name : str
+        動画ファイル名
+    
+    Returns:
+    ----------
+    video : class
+        VideoCaptureクラス
+    video_fps : int
+        単位時間あたりに処理させるコマ数
+    frame : list
+        フレームリスト
+    """
     video = cv2.VideoCapture('{}.mp4'.format(file_name))
     video_fps = video.get(cv2.CAP_PROP_FPS)
-    return video, video_fps
+    
+    frame = []
+    while True:
+        is_good, f = video.read()
+        if not is_good:
+            break
+        frame.append(f)
+    # print(np.array(frame))
+    frame = np.array(frame)
+    return video, video_fps, frame
 
-video, video_fps = loading_video(file_name)
+video, video_fps, frame = loading_video(file_name)
 
-frame = []
-while True:
-    is_good, f = video.read()
-    if not is_good:
-        break
-    frame.append(f)
-print(np.array(frame))
-frame = np.array(frame)
-
+# 何してるか不明(加工前後で差分なし)
 _, height, width, _ = frame.shape
 
 # JSONデータ読込
@@ -36,7 +52,7 @@ target = []
 
 for i, person in enumerate(persons):
     person['Timestamp'] = int(person['Timestamp']*video_fps/1000)
-    print(person)
+    # print(person)
     target.append(person)
 
 # 動画にJSONの情報を書き込む
