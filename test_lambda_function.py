@@ -15,6 +15,13 @@ class TestFunc(unittest.TestCase):
         expected = {'Timestamp': 0, 'Person': {'Index': 0, 'BoundingBox': {'Width': 0.17656250298023224, 'Height': 0.7138888835906982, 'Left': 0.16562500596046448, 'Top': 0.11388888955116272}}}
         actual = lambda_function.get_persons(file_name)
         self.assertEqual(expected, actual[0])
+    
+    def test_enumerate_persons(self):
+        file_name = 'IMG_3656_lambda'
+        persons = lambda_function.get_persons(file_name)
+        expected = {'Timestamp': 0, 'Person': {'Index': 0, 'BoundingBox': {'Width': 0.17656250298023224, 'Height': 0.7138888835906982, 'Left': 0.16562500596046448, 'Top': 0.11388888955116272}}}
+        actual = lambda_function.enumerate_persons(persons)
+        self.assertEqual(expected, actual[0])
 
 if __name__ == '__main__':
     unittest.main()

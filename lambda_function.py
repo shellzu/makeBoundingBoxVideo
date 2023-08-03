@@ -65,12 +65,27 @@ def get_persons(file_name):
 
 persons = get_persons(file_name)
 
-target = []
+def enumerate_persons(persons):
+    """personsを数え上げる関数
 
-for i, person in enumerate(persons):
-    person['Timestamp'] = int(person['Timestamp']*video_fps/1000)
-    # print(person)
-    target.append(person)
+    Parameters:
+    ----------
+    persons : list
+        personリスト
+    
+    Returns:
+    ----------
+    target : list
+        ターゲットリスト
+    """
+    target = []
+    for i, person in enumerate(persons):
+        person['Timestamp'] = int(person['Timestamp']*video_fps/1000)
+        # print(person)
+        target.append(person)
+    return target
+
+target = enumerate_persons(persons)
 
 # 動画にJSONの情報を書き込む
 for t in target:
