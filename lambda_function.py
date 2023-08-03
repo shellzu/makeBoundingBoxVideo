@@ -67,6 +67,7 @@ persons = get_persons(file_name)
 
 def enumerate_persons(persons):
     """personsを数え上げる関数
+       fpsを元にperson['Timestamp']を加工して詰めなおし
 
     Parameters:
     ----------
@@ -80,42 +81,62 @@ def enumerate_persons(persons):
     """
     target = []
     for i, person in enumerate(persons):
+        # ex. 3040 → 76
         person['Timestamp'] = int(person['Timestamp']*video_fps/1000)
-        # print(person)
         target.append(person)
     return target
 
 target = enumerate_persons(persons)
 
-# 動画にJSONの情報を書き込む
-for t in target:
-    i = t['Timestamp']
-    ####### t['Person']をt['Labels']['Instances']に変更 #######
-    if 'BoundingBox' in t['Person']:
-        box = t['Person']['BoundingBox']
+def write_boundingbox(frame, target):
+    """バウンディングボックス描画関数
 
-        x = round(width * box['Left'])
-        y = round(height * box['Top'])
-        w = round(width * box['Width'])
-        h = round(height * box['Height'])
 
-        cv2.rectangle(frame[i], (x, y), (x + w, y + h), (255, 255, 255), 3)
-        cv2.putText(frame[i], str(t['Person']['Index']), (x, y - 9),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 3)
-    ####### t['Labels']['Name']が"Duck"の場合 #######
-    if 'Face' in t['Person']:
-        
-        ####### t['Labels']['Instances']['BoundingBox'] #######
-        box = t['Person']['Face']['BoundingBox']
+    Parameters:
+    ----------
+    frame : list
+        フレームリスト
+    target : list
+        ターゲットリスト
+    
+    Returns:
+    ----------
+    ？？？ : ？？？
+        ？？？
+    """
 
-        x = round(width * box['Left'])
-        y = round(height * box['Top'])
-        w = round(width * box['Width'])
-        h = round(height * box['Height'])
+    # 動画にJSONの情報を書き込む
+    for t in target:
+        i = t['Timestamp']
+        ####### t['Person']をt['Labels']['Instances']に変更 #######
+        if 'BoundingBox' in t['Person']:
+            box = t['Person']['BoundingBox']
 
-        cv2.rectangle(frame[i], (x, y), (x + w, y + h), (255, 0, 0), 3)
-        # cv2.putText(frame[i], str('Face {}'.format(t['Person']['Index'])), (x, y - 9),
-        #             cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 0, 0), 3)
+            x = round(width * box['Left'])
+            y = round(height * box['Top'])
+            w = round(width * box['Width'])
+            h = round(height * box['Height'])
+
+            cv2.rectangle(frame[i], (x, y), (x + w, y + h), (255, 255, 255), 3)
+            cv2.putText(frame[i], str(t['Person']['Index']), (x, y - 9),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 3)
+        ####### t['Labels']['Name']が"Duck"の場合 #######
+        if 'Face' in t['Person']:
+            
+            ####### t['Labels']['Instances']['BoundingBox'] #######
+            box = t['Person']['Face']['BoundingBox']
+
+            x = round(width * box['Left'])
+            y = round(height * box['Top'])
+            w = round(width * box['Width'])
+            h = round(height * box['Height'])
+
+            cv2.rectangle(frame[i], (x, y), (x + w, y + h), (255, 0, 0), 3)
+            cv2.putText(frame[i], str('Face {}'.format(t['Person']['Index'])), (x, y - 9),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 0, 0), 3)
+        return
+
+write_boundingbox(frame, target)
 
 # 解析結果動画出力
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
