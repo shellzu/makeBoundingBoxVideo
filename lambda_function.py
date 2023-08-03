@@ -37,12 +37,6 @@ def loading_video(file_name):
     frame = np.array(frame)
     return video, video_fps, frame
 
-# 動画読み込み関数呼び出し
-video, video_fps, frame = loading_video(file_name)
-
-# 何してるか不明(加工前後で差分なし)
-_, height, width, _ = frame.shape
-
 def get_persons(file_name):
     """persons取得関数
 
@@ -62,8 +56,6 @@ def get_persons(file_name):
 
     ####### json_data['Labels']に変更 #######
     return json_data['Persons']
-
-persons = get_persons(file_name)
 
 def enumerate_persons(persons):
     """personsを数え上げる関数
@@ -85,8 +77,6 @@ def enumerate_persons(persons):
         person['Timestamp'] = int(person['Timestamp']*video_fps/1000)
         target.append(person)
     return target
-
-target = enumerate_persons(persons)
 
 def write_boundingbox(frame, target):
     """バウンディングボックス描画関数
@@ -135,8 +125,6 @@ def write_boundingbox(frame, target):
                         cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 0, 0), 3)
         return
 
-write_boundingbox(frame, target)
-
 def output_video(video_fps, frame):
     """解析結果動画出力関数
 
@@ -159,5 +147,19 @@ def output_video(video_fps, frame):
     for d in frame:
         video.write(d)
     video.release()
+
+#### 処理開始 ####
+
+# 動画読み込み関数呼び出し
+video, video_fps, frame = loading_video(file_name)
+
+# 何してるか不明(加工前後で差分なし)
+_, height, width, _ = frame.shape
+
+persons = get_persons(file_name)
+
+target = enumerate_persons(persons)
+
+write_boundingbox(frame, target)
 
 output_video(video_fps, frame)
