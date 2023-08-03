@@ -19,5 +19,11 @@ class TestFunc(unittest.TestCase):
         actual = lambda_function_for_kamo.get_lavels(file_name)
         self.assertEqual(expected, actual[0])
 
+    def test_enumerate_lavels(self):
+        lavels = lambda_function_for_kamo.get_lavels(file_name)
+        expected = {'Timestamp': 0, 'Label': {'Name': 'Adult', 'Confidence': 93.61540222167969, 'Instances': [{'BoundingBox': {'Width': 0.1031993180513382, 'Height': 0.31720104813575745, 'Left': 0.21056178212165833, 'Top': 0.0007387797231785953}, 'Confidence': 98.90129852294922}], 'Parents': [{'Name': 'Person'}], 'Aliases': [], 'Categories': [{'Name': 'Person Description'}]}}
+        actual = lambda_function_for_kamo.enumerate_lavels(lavels)
+        self.assertEqual(expected, actual[0])
+
 if __name__ == '__main__':
     unittest.main()

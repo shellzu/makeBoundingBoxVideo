@@ -56,6 +56,26 @@ def get_lavels(file_name):
 
     return json_data['Labels']
 
+def enumerate_lavels(lavels):
+    """lavelsを数え上げる関数
+       fpsを元にperson['Timestamp']を加工して詰めなおし
+
+    Parameters:
+    ----------
+    lavels : list
+        personリスト
+    
+    Returns:
+    ----------
+    target : list
+        ターゲットリスト
+    """
+    target = []
+    for i, lavel in enumerate(lavels):
+        # ex. 3040 → 76
+        lavel['Timestamp'] = int(lavel['Timestamp']*video_fps/1000)
+        target.append(lavel)
+    return target
 
 #### 処理開始 ####
 
@@ -66,3 +86,5 @@ video, video_fps, frame = loading_video(file_name)
 _, height, width, _ = frame.shape
 
 lavels = get_lavels(file_name)
+
+target = enumerate_lavels(lavels)
