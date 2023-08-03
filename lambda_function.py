@@ -81,7 +81,6 @@ def enumerate_persons(persons):
 def write_boundingbox(frame, target):
     """バウンディングボックス描画関数
 
-
     Parameters:
     ----------
     frame : list
