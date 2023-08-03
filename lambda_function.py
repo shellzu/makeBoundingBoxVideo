@@ -7,9 +7,13 @@ import cv2
 
 file_name = 'IMG_3656_lambda'
 
-# 動画読込
-video = cv2.VideoCapture('{}.mp4'.format(file_name))
-video_fps = video.get(cv2.CAP_PROP_FPS)
+# 動画読込関数
+def loading_video(file_name):
+    video = cv2.VideoCapture('{}.mp4'.format(file_name))
+    video_fps = video.get(cv2.CAP_PROP_FPS)
+    return video, video_fps
+
+video, video_fps = loading_video(file_name)
 
 frame = []
 while True:
