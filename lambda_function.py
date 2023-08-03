@@ -37,17 +37,34 @@ def loading_video(file_name):
     frame = np.array(frame)
     return video, video_fps, frame
 
+# 動画読み込み関数呼び出し
 video, video_fps, frame = loading_video(file_name)
 
 # 何してるか不明(加工前後で差分なし)
 _, height, width, _ = frame.shape
 
-# JSONデータ読込
-with open('{}.json'.format(file_name), 'r') as f:
-    json_data = json.load(f)
+def get_persons(file_name):
+    """persons取得関数
 
-####### json_data['Labels']に変更 #######
-persons = json_data['Persons']
+    Parameters:
+    ----------
+    file_name : str
+        Rekognitionによって生成されるJSONファイル名
+    
+    Returns:
+    ----------
+    persons : dict
+        persons(人を認識した場合に出力される階層)
+    """
+    # JSONデータ読込
+    with open('{}.json'.format(file_name), 'r') as f:
+        json_data = json.load(f)
+
+    ####### json_data['Labels']に変更 #######
+    return json_data['Persons']
+
+persons = get_persons(file_name)
+
 target = []
 
 for i, person in enumerate(persons):
