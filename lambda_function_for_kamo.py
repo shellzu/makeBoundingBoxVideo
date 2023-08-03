@@ -97,6 +97,7 @@ def write_boundingbox(frame, target):
         i = t['Timestamp']
         if 'BoundingBox' in t['Label']['Instances']:
             box = t['Label']['Instances']['BoundingBox']
+            print(box)
 
             x = round(width * box['Left'])
             y = round(height * box['Top'])
@@ -106,8 +107,8 @@ def write_boundingbox(frame, target):
             cv2.rectangle(frame[i], (x, y), (x + w, y + h), (255, 255, 255), 3)
             # cv2.putText(frame[i], str(t['Label']['Instances']['Index']), (x, y - 9),
             #             cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 3)
+        
         if 'Bird' in t['Label']:
-            # TODO: 階層がPersonsと異なっているためエラー
             box = t['Label']['Instances']['BoundingBox']
 
             # Persons：
@@ -127,6 +128,29 @@ def write_boundingbox(frame, target):
             #             cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 0, 0), 3)
     return
 
+def output_video(video_fps, frame):
+    """解析結果動画出力関数
+
+    Parameters:
+    ----------
+    video_fps : int
+        コマ数
+    frame : list
+        フレームリスト
+    
+    Returns:
+    ----------
+    None
+    """
+
+    # 解析結果動画出力
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    video = cv2.VideoWriter('{}_rect.mp4'.format(file_name), fourcc, video_fps, (width, height))
+
+    for d in frame:
+        video.write(d)
+    video.release()
+
 #### 処理開始 ####
 
 # 動画読み込み関数呼び出し
@@ -140,3 +164,5 @@ lavels = get_lavels(file_name)
 target = enumerate_lavels(lavels)
 
 write_boundingbox(frame, target)
+
+output_video(video_fps, frame)

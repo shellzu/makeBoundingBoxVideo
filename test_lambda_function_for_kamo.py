@@ -27,12 +27,22 @@ class TestFunc(unittest.TestCase):
 
     # 結合テスト
     def test_write_boundingbox(self):
-        file_name = 'IMG_3656_lambda'
         lavels = lambda_function_for_kamo.get_lavels(file_name)
         video, video_fps, frame = lambda_function_for_kamo.loading_video(file_name)
         target = lambda_function_for_kamo.enumerate_lavels(lavels)
         expected = None
         actual = lambda_function_for_kamo.write_boundingbox(frame, target)
+        self.assertEqual(expected, actual)
+
+    # 結合テスト
+    def test_output_video(self):
+        expected = datetime.datetime.now().strftime("%Y/%m/%d %H:%M")
+        video, video_fps, frame = lambda_function_for_kamo.loading_video(file_name)
+        lambda_function_for_kamo.output_video(video_fps, frame)
+        
+        output_file_name = pathlib.Path('{}.mp4'.format(file_name))
+        update_time = os.path.getatime(output_file_name)
+        actual = datetime.datetime.fromtimestamp(update_time).strftime("%Y/%m/%d %H:%M")
         self.assertEqual(expected, actual)
 
 if __name__ == '__main__':
