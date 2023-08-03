@@ -25,5 +25,15 @@ class TestFunc(unittest.TestCase):
         actual = lambda_function_for_kamo.enumerate_lavels(lavels)
         self.assertEqual(expected, actual[0])
 
+    # 結合テスト
+    def test_write_boundingbox(self):
+        file_name = 'IMG_3656_lambda'
+        lavels = lambda_function_for_kamo.get_lavels(file_name)
+        video, video_fps, frame = lambda_function_for_kamo.loading_video(file_name)
+        target = lambda_function_for_kamo.enumerate_lavels(lavels)
+        expected = None
+        actual = lambda_function_for_kamo.write_boundingbox(frame, target)
+        self.assertEqual(expected, actual)
+
 if __name__ == '__main__':
     unittest.main()

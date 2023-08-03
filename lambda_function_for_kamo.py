@@ -77,6 +77,56 @@ def enumerate_lavels(lavels):
         target.append(lavel)
     return target
 
+def write_boundingbox(frame, target):
+    """バウンディングボックス描画関数
+
+    Parameters:
+    ----------
+    frame : list
+        フレームリスト
+    target : list
+        ターゲットリスト
+    
+    Returns:
+    ----------
+    None
+    """
+
+    # 動画にJSONの情報を書き込む
+    for t in target:
+        i = t['Timestamp']
+        if 'BoundingBox' in t['Label']['Instances']:
+            box = t['Label']['Instances']['BoundingBox']
+
+            x = round(width * box['Left'])
+            y = round(height * box['Top'])
+            w = round(width * box['Width'])
+            h = round(height * box['Height'])
+
+            cv2.rectangle(frame[i], (x, y), (x + w, y + h), (255, 255, 255), 3)
+            # cv2.putText(frame[i], str(t['Label']['Instances']['Index']), (x, y - 9),
+            #             cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 3)
+        if 'Bird' in t['Label']:
+            # TODO: 階層がPersonsと異なっているためエラー
+            box = t['Label']['Instances']['BoundingBox']
+
+            # Persons：
+            # {'Timestamp' 0, 'Person' {'Index' 0, 'BoundingBox' {'Width' 0.17656250298023224, 'Height'
+
+            # Labels：
+            # {'Timestamp': 0, 'Label': {'Name': 'Bird', 'Confidence': 94.80776977539062, 'Instances': [
+            # {'BoundingBox': {'Width': 0.14320507645606995, 'Height'
+
+            x = round(width * box['Left'])
+            y = round(height * box['Top'])
+            w = round(width * box['Width'])
+            h = round(height * box['Height'])
+
+            cv2.rectangle(frame[i], (x, y), (x + w, y + h), (255, 0, 0), 3)
+            # cv2.putText(frame[i], str('Face {}'.format(t['Person']['Index'])), (x, y - 9),
+            #             cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 0, 0), 3)
+    return
+
 #### 処理開始 ####
 
 # 動画読み込み関数呼び出し
@@ -88,3 +138,5 @@ _, height, width, _ = frame.shape
 lavels = get_lavels(file_name)
 
 target = enumerate_lavels(lavels)
+
+write_boundingbox(frame, target)
