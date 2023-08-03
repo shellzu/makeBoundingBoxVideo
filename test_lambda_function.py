@@ -26,6 +26,7 @@ class TestFunc(unittest.TestCase):
         actual = lambda_function.enumerate_persons(persons)
         self.assertEqual(expected, actual[0])
     
+    # 結合テスト
     def test_write_boundingbox(self):
         file_name = 'IMG_3656_lambda'
         persons = lambda_function.get_persons(file_name)
@@ -35,6 +36,7 @@ class TestFunc(unittest.TestCase):
         actual = lambda_function.write_boundingbox(frame, target)
         self.assertEqual(expected, actual)
 
+    # 結合テスト
     def test_output_video(self):
         file_name = 'IMG_3656_lambda'
         expected = datetime.datetime.now().strftime("%Y/%m/%d %H:%M")
