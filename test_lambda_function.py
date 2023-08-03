@@ -1,5 +1,8 @@
 import unittest
 import lambda_function
+import pathlib
+import datetime
+import os
 
 class TestFunc(unittest.TestCase):
     def test_loading_video(self):
@@ -30,6 +33,17 @@ class TestFunc(unittest.TestCase):
         target = lambda_function.enumerate_persons(persons)
         expected = None
         actual = lambda_function.write_boundingbox(frame, target)
+        self.assertEqual(expected, actual)
+
+    def test_output_video(self):
+        file_name = 'IMG_3656_lambda'
+        expected = datetime.datetime.now().strftime("%Y/%m/%d %H:%M")
+        video, video_fps, frame = lambda_function.loading_video(file_name)
+        lambda_function.output_video(video_fps, frame)
+        
+        output_file_name = pathlib.Path('{}.mp4'.format(file_name))
+        update_time = os.path.getatime(output_file_name)
+        actual = datetime.datetime.fromtimestamp(update_time).strftime("%Y/%m/%d %H:%M")
         self.assertEqual(expected, actual)
 
 if __name__ == '__main__':

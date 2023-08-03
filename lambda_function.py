@@ -101,8 +101,7 @@ def write_boundingbox(frame, target):
     
     Returns:
     ----------
-    ？？？ : ？？？
-        ？？？
+    None
     """
 
     # 動画にJSONの情報を書き込む
@@ -138,10 +137,27 @@ def write_boundingbox(frame, target):
 
 write_boundingbox(frame, target)
 
-# 解析結果動画出力
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-video = cv2.VideoWriter('{}_rect.mp4'.format(file_name), fourcc, video_fps, (width, height))
+def output_video(video_fps, frame):
+    """解析結果動画出力関数
 
-for d in frame:
-    video.write(d)
-video.release()
+    Parameters:
+    ----------
+    video_fps : int
+        コマ数
+    frame : list
+        フレームリスト
+    
+    Returns:
+    ----------
+    None
+    """
+
+    # 解析結果動画出力
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    video = cv2.VideoWriter('{}_rect.mp4'.format(file_name), fourcc, video_fps, (width, height))
+
+    for d in frame:
+        video.write(d)
+    video.release()
+
+output_video(video_fps, frame)
