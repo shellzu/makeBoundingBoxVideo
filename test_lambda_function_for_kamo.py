@@ -45,5 +45,8 @@ class TestFunc(unittest.TestCase):
         actual = datetime.datetime.fromtimestamp(update_time).strftime("%Y/%m/%d %H:%M")
         self.assertEqual(expected, actual)
 
+    def test_output_map(self):
+        lambda_function_for_kamo.output_map()
+
 if __name__ == '__main__':
     unittest.main()
