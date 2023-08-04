@@ -5,7 +5,9 @@ import json
 import numpy as np
 import cv2
 
-file_name = '19368_640x360'
+file_name = '19368_640x360' # フリー素材（白鳥）
+# file_name = 'IMG_3570' # 撮影した野鳥
+# file_name = '18381_640x360' # フリー素材（カモ）
 
 def loading_video(file_name):
     """動画読み込み関数
