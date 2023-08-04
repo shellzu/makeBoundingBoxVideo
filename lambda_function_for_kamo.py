@@ -10,6 +10,8 @@ file_name = 'data/19368_640x360' # フリー素材（白鳥）
 # file_name = '18381_640x360' # フリー素材（カモ）
 # file_name = '19368_1280x720' # フリー素材（白鳥）
 
+img = cv2.imread('map_takara_chizu.png')
+
 def loading_video(file_name):
     """動画読み込み関数
 
@@ -109,9 +111,10 @@ def write_boundingbox(frame, target):
                 w = round(width * box['Width'])
                 h = round(height * box['Height'])
 
+                # 長方形描画(画像, 左上座標 (X, Y), 右下座標 (X, Y), 色 (B, G, R), 線の太さ)
                 cv2.rectangle(frame[i], (x, y), (x + w, y + h), (255, 255, 255), 3)
-                # cv2.putText(frame[i], str(t['Label']['Instances']['Index']), (x, y - 9),
-                #             cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 3)
+                cv2.putText(frame[i], str(t['Label']['Name']), (x, y - 9),
+                            cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 3)
 
             if 'Bird' in t['Label']['Name']:
                 box = t['Label']['Instances'][0]['BoundingBox']
@@ -124,6 +127,7 @@ def write_boundingbox(frame, target):
                 cv2.rectangle(frame[i], (x, y), (x + w, y + h), (255, 0, 0), 3)
                 # cv2.putText(frame[i], str('Face {}'.format(t['Person']['Index'])), (x, y - 9),
                 #             cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 0, 0), 3)
+
     return
 
 def output_video(video_fps, frame):
@@ -145,9 +149,42 @@ def output_video(video_fps, frame):
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     video = cv2.VideoWriter('{}_rect.mp4'.format(file_name), fourcc, video_fps, (width, height))
 
+    # Writeメソッドに1フレームずつ渡して動画を書き出す
     for d in frame:
         video.write(d)
     video.release()
+
+def output_map(video_fps, frame):
+    """地図出力関数
+
+    Parameters:
+    ----------
+    map : ???
+        地図の元となる画像
+    frame : list
+        描画情報
+    
+    Returns:
+    ----------
+    None
+    """
+    for t in target:
+        i = t['Timestamp']
+
+        if not len(t['Label']['Instances'])==0:
+            if 'BoundingBox' in t['Label']['Instances'][0]:
+                box = t['Label']['Instances'][0]['BoundingBox']
+
+                x = round(width * box['Left'])
+                y = round(height * box['Top'])
+                w = round(width * box['Width'])
+                h = round(height * box['Height'])
+
+                # 長方形描画(画像, 左上座標 (X, Y), 右下座標 (X, Y), 色 (B, G, R), 線の太さ)
+                cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 255), 3)
+                # cv2.putText(frame[i], str(t['Label']['Name']), (x, y - 9),
+                #             cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 3)
+    return
 
 #### 処理開始 ####
 
@@ -164,3 +201,7 @@ target = enumerate_lavels(lavels)
 write_boundingbox(frame, target)
 
 output_video(video_fps, frame)
+
+output_map(video_fps, frame)
+
+cv2.imwrite('sample_after.png', img)
