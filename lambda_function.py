@@ -5,7 +5,7 @@ import json
 import numpy as np
 import cv2
 
-file_name = 'IMG_3656_lambda'
+file_name = 'data/IMG_3656_lambda'
 
 def loading_video(file_name):
     """動画読み込み関数

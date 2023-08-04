@@ -4,7 +4,7 @@ import pathlib
 import datetime
 import os
 
-file_name = '19368_640x360'
+file_name = 'data/19368_640x360'
 
 class TestFunc(unittest.TestCase):
     def test_loading_video(self):
