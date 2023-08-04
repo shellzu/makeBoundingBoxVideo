@@ -95,37 +95,32 @@ def write_boundingbox(frame, target):
     # 動画にJSONの情報を書き込む
     for t in target:
         i = t['Timestamp']
-        if 'BoundingBox' in t['Label']['Instances']:
-            box = t['Label']['Instances']['BoundingBox']
-            print(box)
 
-            x = round(width * box['Left'])
-            y = round(height * box['Top'])
-            w = round(width * box['Width'])
-            h = round(height * box['Height'])
+        if not len(t['Label']['Instances'])==0:
 
-            cv2.rectangle(frame[i], (x, y), (x + w, y + h), (255, 255, 255), 3)
-            # cv2.putText(frame[i], str(t['Label']['Instances']['Index']), (x, y - 9),
-            #             cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 3)
-        
-        if 'Bird' in t['Label']:
-            box = t['Label']['Instances']['BoundingBox']
+            if 'BoundingBox' in t['Label']['Instances'][0]:
+                box = t['Label']['Instances'][0]['BoundingBox']
 
-            # Persons：
-            # {'Timestamp' 0, 'Person' {'Index' 0, 'BoundingBox' {'Width' 0.17656250298023224, 'Height'
+                x = round(width * box['Left'])
+                y = round(height * box['Top'])
+                w = round(width * box['Width'])
+                h = round(height * box['Height'])
 
-            # Labels：
-            # {'Timestamp': 0, 'Label': {'Name': 'Bird', 'Confidence': 94.80776977539062, 'Instances': [
-            # {'BoundingBox': {'Width': 0.14320507645606995, 'Height'
+                cv2.rectangle(frame[i], (x, y), (x + w, y + h), (255, 255, 255), 3)
+                # cv2.putText(frame[i], str(t['Label']['Instances']['Index']), (x, y - 9),
+                #             cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 3)
 
-            x = round(width * box['Left'])
-            y = round(height * box['Top'])
-            w = round(width * box['Width'])
-            h = round(height * box['Height'])
+            if 'Bird' in t['Label']['Name']:
+                box = t['Label']['Instances'][0]['BoundingBox']
 
-            cv2.rectangle(frame[i], (x, y), (x + w, y + h), (255, 0, 0), 3)
-            # cv2.putText(frame[i], str('Face {}'.format(t['Person']['Index'])), (x, y - 9),
-            #             cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 0, 0), 3)
+                x = round(width * box['Left'])
+                y = round(height * box['Top'])
+                w = round(width * box['Width'])
+                h = round(height * box['Height'])
+
+                cv2.rectangle(frame[i], (x, y), (x + w, y + h), (255, 0, 0), 3)
+                # cv2.putText(frame[i], str('Face {}'.format(t['Person']['Index'])), (x, y - 9),
+                #             cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 0, 0), 3)
     return
 
 def output_video(video_fps, frame):
