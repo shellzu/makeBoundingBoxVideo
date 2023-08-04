@@ -8,7 +8,7 @@ import cv2
 file_name = 'data/19368_640x360' # フリー素材（白鳥）
 # file_name = 'IMG_3570' # 撮影した野鳥
 # file_name = '18381_640x360' # フリー素材（カモ）
-# file_name = '19368_1280x720' # フリー素材（白鳥）
+# file_name = 'data/19368_1280x720' # フリー素材（白鳥）
 
 # img = cv2.imread('map_takara_chizu.png')
 img = cv2.imread('image.jpg')
@@ -132,23 +132,6 @@ def write_boundingbox(frame, target):
                 # cv2.putText(frame[i], str('Face {}'.format(t['Person']['Index'])), (x, y - 9),
                 #             cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 0, 0), 3)
 
-    return
-
-def output_video(video_fps, frame):
-    """解析結果動画出力関数
-
-    Parameters:
-    ----------
-    video_fps : int
-        コマ数
-    frame : list
-        フレームリスト
-    
-    Returns:
-    ----------
-    None
-    """
-
     # 解析結果動画出力
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     video = cv2.VideoWriter('{}_rect.mp4'.format(file_name), fourcc, video_fps, (width, height))
@@ -194,8 +177,6 @@ def output_map(video_fps, frame):
 
 # 動画読み込み関数呼び出し
 video, video_fps, frame = loading_video(file_name)
-
-# 何してるか不明(加工前後で差分なし)
 _, height, width, _ = frame.shape
 
 lavels = get_lavels(file_name)
@@ -203,8 +184,6 @@ lavels = get_lavels(file_name)
 target = enumerate_lavels(lavels)
 
 write_boundingbox(frame, target)
-
-output_video(video_fps, frame)
 
 output_map(video_fps, frame)
 
