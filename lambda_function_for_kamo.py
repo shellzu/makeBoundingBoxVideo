@@ -10,7 +10,8 @@ file_name = 'data/19368_640x360' # フリー素材（白鳥）
 # file_name = '18381_640x360' # フリー素材（カモ）
 # file_name = '19368_1280x720' # フリー素材（白鳥）
 
-img = cv2.imread('map_takara_chizu.png')
+# img = cv2.imread('map_takara_chizu.png')
+img = cv2.imread('image.jpg')
 
 def loading_video(file_name):
     """動画読み込み関数
@@ -33,11 +34,14 @@ def loading_video(file_name):
     video_fps = video.get(cv2.CAP_PROP_FPS)
     
     frame = []
+
     while True:
         is_good, f = video.read()
         if not is_good:
             break
         frame.append(f)
+        cv2.imwrite("image.jpg", f)
+
     # print(np.array(frame))
     frame = np.array(frame)
     return video, video_fps, frame
@@ -204,4 +208,5 @@ output_video(video_fps, frame)
 
 output_map(video_fps, frame)
 
+# 地図出力
 cv2.imwrite('sample_after.png', img)
